@@ -105,11 +105,27 @@
     @livewireStyles
 </head>
 <body>
-
+<body>
     <!-- Header Section -->
-    <header>
-        <h1>Qhatu</h1>
-        <p>Aprende a invertir con éxito desde lo más básico hasta estrategias avanzadas.</p>
+    <header class="d-flex justify-content-between align-items-center px-4 py-3 bg-dark text-white">
+        <div>
+            <h1>Qhatu</h1>
+            <p>Aprende a invertir con éxito desde lo más básico hasta estrategias avanzadas.</p>
+        </div>
+
+        <!-- Botones de Login y Registro -->
+        @if (Route::has('login'))
+            <div>
+                @auth
+                    <a href="{{ url('/') }}" class="btn btn-light rounded-pill px-4 py-2 shadow-sm">Inicio</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-success rounded-pill px-4 py-2 mx-2 shadow-sm">Login</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn btn-outline-warning rounded-pill px-4 py-2 shadow-sm">Register</a>
+                    @endif
+                @endauth
+            </div>
+        @endif
     </header>
 
     <!-- Main Content -->

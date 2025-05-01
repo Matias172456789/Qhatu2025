@@ -1,18 +1,4 @@
 <div>
-    <!-- Barra superior con botones de login y registro -->
-    <div class="d-flex justify-content-end p-3">
-        @if (Route::has('login'))
-            @auth
-                <a href="{{ url('/') }}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">Inicio</a>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-outline-success rounded-pill px-4 py-2 mx-2 shadow-sm">Login</a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="btn btn-outline-warning rounded-pill px-4 py-2 shadow-sm">Register</a>
-                @endif
-            @endauth
-        @endif
-    </div>
-    
     <section class="content-section">
         <h2 class="section-title">¿Qué Aprenderás?</h2>
         <div class="container">
