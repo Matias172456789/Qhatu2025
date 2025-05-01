@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-end p-3">
         @if (Route::has('login'))
             @auth
-                <a href="{{ url('/') }}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">Dashboard</a>
+                <a href="{{ url('/') }}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">Inicio</a>
             @else
                 <a href="{{ route('login') }}" class="btn btn-outline-success rounded-pill px-4 py-2 mx-2 shadow-sm">Login</a>
                 @if (Route::has('register'))
