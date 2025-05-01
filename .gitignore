@@ -21,3 +21,24 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Archivos de configuración locales de Composer
+composer.lock
+
+# Archivos de entorno por entorno
+.env.*
+!.env.example
+
+# Archivos de cache generales
+bootstrap/cache/*.php
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*.php
+storage/logs/*.log
+
+# Archivos de testing y cobertura
+coverage/
+phpunit.xml
+
+# Laravel Telescope (si lo usas)
+storage/telescope
