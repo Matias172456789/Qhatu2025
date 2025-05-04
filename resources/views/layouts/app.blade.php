@@ -10,11 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
     <style>
-        /* Body and general styling */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
@@ -127,7 +128,115 @@
             pointer-events: none;
         }
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"><i class="bi bi-chat-dots-fill fs-4"></i>
+        /* Estilos del Chat*/
+        .modal-dialog {
+            max-width: 700px;
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(90deg, #0062E6, #33AEFF);
+        }
+
+        .chat-body {
+            max-height: 420px;
+            overflow-y: auto;
+            background-color: #f1f5f9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            display: flex;
+            align-items: center;
+            max-width: 75%;
+        }
+
+        .text {
+            padding: 12px 16px;
+            border-radius: 20px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.sent .text {
+            background-color: #007bff;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received .text {
+            background-color: #e4e6eb;
+            color: black;
+            border-bottom-left-radius: 4px;
+        }
+
+        .time {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-input-area {
+            background-color: #ffffff;
+        }
+
+        .chat-input-area input {
+            border-radius: 20px;
+            padding: 10px 15px;
+        }
+
+        .chat-input-area button {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     @livewireStyles
@@ -162,12 +271,8 @@
 
         <!-- Main Content -->
         <main class="main-container">
-
-
             <!-- Insert Content from Other Components -->
             {{ $slot }}
-
-
         </main>
 
         <!-- Footer -->
@@ -177,23 +282,92 @@
 
         <a href="#" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
             data-bs-target="#miModal">
-            <i class="bi bi-chat-dots-fill fs-4"></i>
+            <i class="fas fa-robot"></i>
         </a>
 
-        <!-- Modal -->
+        <!-- Modal Chat -->
         <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="miModalLabel">Título del Modal</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content shadow-lg border-0 rounded-4">
+
+                    <!-- Header -->
+                    <div class="modal-header bg-gradient-primary text-white rounded-top-4">
+                        <h5 class="modal-title" id="miModalLabel"><i class="fas fa-comments me-2"></i>Atención al
+                            Cliente</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
                     </div>
-                    <div class="modal-body">
-                        Aquí va el contenido de tu modal: texto, formularios, imágenes, lo que necesites.
+
+                    <!-- Chat Body -->
+                    <div class="modal-body p-0">
+                        <div class="chat-body" id="chatMessages">
+
+                            <!-- Mensaje recibido -->
+                            <div class="message received">
+                                <div class="message-content">
+                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
+                                    <div class="text">
+                                        <p>¡Hola! 👋 Soy Ana, tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+                                        <span class="time">09:15</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mensaje enviado -->
+                            <div class="message sent">
+                                <div class="message-content">
+                                    <div class="text">
+                                        <p>Hola Ana, tengo dudas sobre mi último pedido.</p>
+                                        <span class="time">09:16</span>
+                                    </div>
+                                    <img src="https://via.placeholder.com/40x40?text=Y" class="avatar" alt="Tú">
+                                </div>
+                            </div>
+
+                            <!-- Mensaje recibido -->
+                            <div class="message received">
+                                <div class="message-content">
+                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
+                                    <div class="text">
+                                        <p>Con gusto te ayudo. ¿Podrías darme el número del pedido o el correo asociado?
+                                        </p>
+                                        <span class="time">09:17</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mensaje enviado -->
+                            <div class="message sent">
+                                <div class="message-content">
+                                    <div class="text">
+                                        <p>Claro, es el #12589 y el correo es juan.perez@gmail.com</p>
+                                        <span class="time">09:17</span>
+                                    </div>
+                                    <img src="https://via.placeholder.com/40x40?text=Y" class="avatar" alt="Tú">
+                                </div>
+                            </div>
+
+                            <!-- Mensaje recibido -->
+                            <div class="message received">
+                                <div class="message-content">
+                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
+                                    <div class="text">
+                                        <p>Gracias Juan. Veo que tu pedido fue enviado ayer 🚚 y llegará entre hoy y
+                                            mañana.</p>
+                                        <span class="time">09:18</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
+
+                    <!-- Input -->
+                    <div class="chat-input-area border-top d-flex align-items-center p-3">
+                        <input type="text" class="form-control me-2" placeholder="Escribe tu mensaje...">
+                        <button class="btn btn-primary rounded-circle" title="Enviar">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
