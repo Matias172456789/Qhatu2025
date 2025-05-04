@@ -292,8 +292,7 @@
 
                     <!-- Header -->
                     <div class="modal-header bg-gradient-primary text-white rounded-top-4">
-                        <h5 class="modal-title" id="miModalLabel"><i class="fas fa-comments me-2"></i>Atención al
-                            Cliente</h5>
+                        <h5 class="modal-title" id="miModalLabel"><i class="fas fa-magic me-2"></i>IA Chat</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Cerrar"></button>
                     </div>
