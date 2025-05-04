@@ -305,7 +305,7 @@
                             <!-- Mensaje recibido -->
                             <div class="message received">
                                 <div class="message-content">
-                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
+                                    <img src="/bot.gif" class="avatar" alt="Agente">
                                     <div class="text">
                                         <p>¡Hola! 👋 Soy Ana, tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
                                         <span class="time">09:15</span>
@@ -318,44 +318,9 @@
                                 <div class="message-content">
                                     <div class="text">
                                         <p>Hola Ana, tengo dudas sobre mi último pedido.</p>
-                                        <span class="time">09:16</span>
+                                        <span class="time text-white">09:16</span>
                                     </div>
-                                    <img src="https://via.placeholder.com/40x40?text=Y" class="avatar" alt="Tú">
-                                </div>
-                            </div>
-
-                            <!-- Mensaje recibido -->
-                            <div class="message received">
-                                <div class="message-content">
-                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
-                                    <div class="text">
-                                        <p>Con gusto te ayudo. ¿Podrías darme el número del pedido o el correo asociado?
-                                        </p>
-                                        <span class="time">09:17</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Mensaje enviado -->
-                            <div class="message sent">
-                                <div class="message-content">
-                                    <div class="text">
-                                        <p>Claro, es el #12589 y el correo es juan.perez@gmail.com</p>
-                                        <span class="time">09:17</span>
-                                    </div>
-                                    <img src="https://via.placeholder.com/40x40?text=Y" class="avatar" alt="Tú">
-                                </div>
-                            </div>
-
-                            <!-- Mensaje recibido -->
-                            <div class="message received">
-                                <div class="message-content">
-                                    <img src="https://via.placeholder.com/40x40?text=A" class="avatar" alt="Agente">
-                                    <div class="text">
-                                        <p>Gracias Juan. Veo que tu pedido fue enviado ayer 🚚 y llegará entre hoy y
-                                            mañana.</p>
-                                        <span class="time">09:18</span>
-                                    </div>
+                                    <img src="tu.png" class="avatar" alt="Tú">
                                 </div>
                             </div>
 
