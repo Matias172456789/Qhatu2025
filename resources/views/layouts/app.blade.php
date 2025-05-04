@@ -313,6 +313,8 @@
                                 </div>
                             </div>
 
+                            
+
                             <!-- Mensaje enviado -->
                             <div class="message sent">
                                 <div class="message-content">
