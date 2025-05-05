@@ -280,64 +280,7 @@
             <p>© 2025 Qhatu. Todos los derechos reservados.</p>
         </footer>
 
-        <a href="#" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
-            data-bs-target="#miModal">
-            <i class="fas fa-robot"></i>
-        </a>
-
-        <!-- Modal Chat -->
-        <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content shadow-lg border-0 rounded-4">
-
-                    <!-- Header -->
-                    <div class="modal-header bg-gradient-primary text-white rounded-top-4">
-                        <h5 class="modal-title" id="miModalLabel"><i class="fas fa-magic me-2"></i>IA Chat</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Cerrar"></button>
-                    </div>
-
-                    <!-- Chat Body -->
-                    <div class="modal-body p-0">
-                        <div class="chat-body" id="chatMessages">
-
-                            <!-- Mensaje recibido -->
-                            <div class="message received">
-                                <div class="message-content">
-                                    <img src="/bot.gif" class="avatar" alt="Agente">
-                                    <div class="text">
-                                        <p>¡Hola! 👋 Soy Ana, tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
-                                        <span class="time">09:15</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-
-                            <!-- Mensaje enviado -->
-                            <div class="message sent">
-                                <div class="message-content">
-                                    <div class="text">
-                                        <p>Hola Ana, tengo dudas sobre mi último pedido.</p>
-                                        <span class="time text-white">09:16</span>
-                                    </div>
-                                    <img src="tu.png" class="avatar" alt="Tú">
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Input -->
-                    <div class="chat-input-area border-top d-flex align-items-center p-3">
-                        <input type="text" class="form-control me-2" placeholder="Escribe tu mensaje...">
-                        <button class="btn btn-primary rounded-circle" title="Enviar">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
