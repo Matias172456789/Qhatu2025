@@ -53,7 +53,7 @@
     </a>
 
     <!-- Modal Chat -->
-    <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg border-0 rounded-4">
 
@@ -67,38 +67,38 @@
                 <!-- Chat Body -->
                 <div class="modal-body p-0">
                     <div class="chat-body" id="chatMessages">
-
-                        <!-- Mensaje recibido -->
-                        <div class="message received">
-                            <div class="message-content">
-                                <img src="/bot.gif" class="avatar" alt="Agente">
-                                <div class="text">
-                                    <p>¡Hola! 👋 Soy Ana, tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
-                                    <span class="time">09:15</span>
+                        @foreach($historial as $mess)
+                            @if($mess->bot)
+                                <!-- Mensaje recibido -->
+                                <div class="message received">
+                                    <div class="message-content">
+                                        <img src="/bot.gif" class="avatar" alt="Agente">
+                                        <div class="text">
+                                            <p>{{ $mess->mensaje }}</p>
+                                            <span class="time">{{ $mess->created_at }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        
-
-                        <!-- Mensaje enviado -->
-                        <div class="message sent">
-                            <div class="message-content">
-                                <div class="text">
-                                    <p>Hola Ana, tengo dudas sobre mi último pedido.</p>
-                                    <span class="time text-white">09:16</span>
+                            @else
+                                <!-- Mensaje enviado -->
+                                <div class="message sent">
+                                    <div class="message-content">
+                                        <div class="text">
+                                            <p>{{ $mess->mensaje }}</p>
+                                            <span class="time text-white">{{ $mess->created_at }}</span>
+                                        </div>
+                                        <img src="/tu.png" class="avatar" alt="Tú">
+                                    </div>
                                 </div>
-                                <img src="tu.png" class="avatar" alt="Tú">
-                            </div>
-                        </div>
-
+                            @endif
+                        @endforeach
                     </div>
                 </div>
 
                 <!-- Input -->
                 <div class="chat-input-area border-top d-flex align-items-center p-3">
-                    <input type="text" class="form-control me-2" placeholder="Escribe tu mensaje...">
-                    <button class="btn btn-primary rounded-circle" title="Enviar">
+                    <input type="text" class="form-control me-2" placeholder="Escribe tu mensaje..." wire:model="message">
+                    <button class="btn btn-primary rounded-circle" wire:click.stop="enviarMensaje()" title="Enviar">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
