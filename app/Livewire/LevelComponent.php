@@ -11,6 +11,7 @@ use App\Models\Level;
 use App\Models\Person;
 use Auth;
 use DB;
+use Http;
 use Livewire\Component;
 
 class LevelComponent extends Component
@@ -150,13 +151,34 @@ class LevelComponent extends Component
         $chatDetalle->save();
 
         // Simular respuesta del bot
+        $respuesta = $this->obtenerRespuesta($this->message);
         $chatDetalleBot = new ChatDetalle();
         $chatDetalleBot->chat_header_id = $chatHeader->id;
-        $chatDetalleBot->mensaje = "PONG";
+        $chatDetalleBot->mensaje = $respuesta;
         $chatDetalleBot->bot = true;
         $chatDetalleBot->save();
 
         $this->message = '';
+    }
+    public function obtenerRespuesta($prompt)
+    {
+        $apiKey = "";
+        $url = "https://api.openai.com/v1/chat/completions";
+        $data = [
+            "model" => "gpt-4o-mini",
+            "messages" => [
+                ["role" => "system", "content" => "Eres un asistente ayuda a responder cuestionarios."],
+                ["role" => "user", "content" => $prompt]
+            ]
+        ];
+
+        $response = Http::withHeaders([
+            "Authorization" => "Bearer $apiKey",
+            "Content-Type" => "application/json"
+        ])->post($url, $data);
+
+
+        return $response->json()['choices'][0]['message']['content'] ?? 'Sin respuesta';
     }
 
     public function mount($personId)
