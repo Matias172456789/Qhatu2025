@@ -47,10 +47,19 @@
         </div>
     </div>
     @endif
-    <a href="#" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
+    @if($this->notificaciones == 0)
+    <a wire:click="abrirModal()" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
         data-bs-target="#miModal">
         <i class="fas fa-robot"></i>
     </a>
+    @else
+    <a wire:click="abrirModal()" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
+        style="background-color: red !important;
+        data-bs-target="#miModal">
+        <i class="fas fa-robot"></i>
+        {{$this->notificaciones}}
+    </a>
+    @endif
 
     <!-- Modal Chat -->
     <div wire:ignore.self class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">

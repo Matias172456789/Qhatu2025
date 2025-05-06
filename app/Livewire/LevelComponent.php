@@ -23,6 +23,8 @@ class LevelComponent extends Component
     public $validacionNivel = '';
     public $message = '';
     public $verPreguntas = false;
+    public $notificaciones = 0;
+
 
     public function seeQuestion()
     {
@@ -52,6 +54,22 @@ class LevelComponent extends Component
         }
         $seleccion->level_question_option_id = $optionId;
         $seleccion->save();
+
+        // Verficar si esta equivocado
+        $option = LevelQuestionOption::find($optionId);
+        if (!$option->correct) {
+            $this->notificaciones++;
+            $level = LevelQuestion::find($option->level_id);
+            $this->message = $level->question;
+            $this->enviarMensaje();
+
+        }
+    }
+
+    public function abrirModal()
+    {
+        // Aqui enceramos las notificaciones ya que esta abriendo el modal
+        $this->notificaciones = 0;
     }
 
     public function sendQuestion()
@@ -151,7 +169,7 @@ class LevelComponent extends Component
         $chatDetalle->save();
 
         // Simular respuesta del bot
-        $respuesta = $this->obtenerRespuesta($this->message);
+        $respuesta = $this->obtenerRespuesta($this->message, $chatHeader->id, $this->message);
         $chatDetalleBot = new ChatDetalle();
         $chatDetalleBot->chat_header_id = $chatHeader->id;
         $chatDetalleBot->mensaje = $respuesta;
@@ -160,25 +178,51 @@ class LevelComponent extends Component
 
         $this->message = '';
     }
-    public function obtenerRespuesta($prompt)
+    public function obtenerRespuesta($prompt, $chatId, $message)
     {
-        $apiKey = "";
-        $url = "https://api.openai.com/v1/chat/completions";
-        $data = [
-            "model" => "gpt-4o-mini",
-            "messages" => [
-                ["role" => "system", "content" => "Eres un asistente ayuda a responder cuestionarios."],
-                ["role" => "user", "content" => $prompt]
-            ]
-        ];
-
-        $response = Http::withHeaders([
-            "Authorization" => "Bearer $apiKey",
-            "Content-Type" => "application/json"
-        ])->post($url, $data);
+        try {
+            $mainUrl = 'http://186.101.189.104:5010/';
+            $chatbotUrl = 'api/chatbot';
 
 
-        return $response->json()['choices'][0]['message']['content'] ?? 'Sin respuesta';
+            $postArray = [
+                "question" => empty($message) ? 'Hola' : $message,
+                "user_id" => (string) $chatId,
+                "max_histories" => 10,
+                "name_space" => "index_55",
+                "index" => "233"
+            ];
+
+            $post = Http::withHeaders([
+                "Content-Type" => "application/json"
+            ])
+                ->timeout(120)
+                ->post($mainUrl . $chatbotUrl, $postArray);
+
+            if ($post->successful()) {
+                $response = json_decode($post->body(), true);
+                return $response['respuesta'];
+            } else {
+                return '';
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+        // $apiKey = "";
+        // $url = "https://api.openai.com/v1/chat/completions";
+        // $data = [
+        //     "model" => "gpt-4o-mini",
+        //     "messages" => [
+        //         ["role" => "system", "content" => "Eres un asistente ayuda a responder cuestionarios."],
+        //         ["role" => "user", "content" => $prompt]
+        //     ]
+        // ];
+
+        // $response = Http::withHeaders([
+        //     "Authorization" => "Bearer $apiKey",
+        //     "Content-Type" => "application/json"
+        // ])->post($url, $data);
+        // return $response->json()['choices'][0]['message']['content'] ?? 'Sin respuesta';
     }
 
     public function mount($personId)
