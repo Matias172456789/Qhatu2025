@@ -6,8 +6,8 @@
             </div>
             <div class="card-body p-5">
                 <div class="mb-4">
-                    <label for="exampleInputPassword1" class="form-label fs-5 fw-bold">Ingresa tu nombre o nick:</label>
-                    <input type="text" class="form-control form-control-lg" wire:model="nick" placeholder="Tu nombre o nickname">
+                    <label for="exampleInputPassword1" class="form-label fs-5 fw-bold">Este es tu nick:</label>
+                    <input type="text" class="form-control form-control-lg" wire:model="nick" placeholder="Tu nombre o nickname" readonly>
                     @error('nick')
                         <p class="text-danger mt-2 mb-2" style="font-size: .9rem;">
                             <i class="fa fa-exclamation-circle ms-2" aria-hidden="true"></i> {{ $message }}
