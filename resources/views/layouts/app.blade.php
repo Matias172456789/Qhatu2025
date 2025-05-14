@@ -257,6 +257,13 @@
                 <div>
                     @auth
                         <a href="{{ url('/') }}" class="btn btn-light rounded-pill px-4 py-2 shadow-sm">Inicio</a>
+                        <!-- Botón de Cerrar Sesión -->
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger rounded-pill px-4 py-2 shadow-sm">
+                                Cerrar sesión
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}"
                             class="btn btn-outline-success rounded-pill px-4 py-2 mx-2 shadow-sm">Login</a>
@@ -280,7 +287,7 @@
             <p>© 2025 Qhatu. Todos los derechos reservados.</p>
         </footer>
 
-        
+
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
