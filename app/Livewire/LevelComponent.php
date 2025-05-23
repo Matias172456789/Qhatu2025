@@ -24,6 +24,7 @@ class LevelComponent extends Component
     public $message = '';
     public $verPreguntas = false;
     public $notificaciones = 0;
+    public bool $sendingMessage = true;
 
 
     public function seeQuestion()
@@ -58,11 +59,9 @@ class LevelComponent extends Component
         // Verficar si esta equivocado
         $option = LevelQuestionOption::find($optionId);
         if (!$option->correct) {
-            $this->notificaciones++;
-            $level = LevelQuestion::find($option->level_id);
-            $this->message = $level->question;
-            $this->enviarMensaje();
-
+            $this->notificaciones = $this->notificaciones + 1;
+            // dd('te quivocaste' . $total);
+            $this->recomendarRevision($questionId);
         }
     }
 
@@ -70,6 +69,7 @@ class LevelComponent extends Component
     {
         // Aqui enceramos las notificaciones ya que esta abriendo el modal
         $this->notificaciones = 0;
+        $this->dispatch('scrollToBottom');
     }
 
     public function sendQuestion()
@@ -149,7 +149,107 @@ class LevelComponent extends Component
         }
     }
 
-    public function enviarMensaje()
+    public function respuestasSimuladasGPT()
+    {
+        return $respuestas = [
+            "📌 Te recomiendo revisar el minuto :time del video. Ahí se explica justo lo que necesitas. ¡No te lo pierdas! 🎥",
+            "👀 Dale una mirada al minuto :time, seguro aclara tus dudas. Es un punto clave del video. 🚀",
+            "🎬 En el minuto :time del video encontrarás una explicación muy útil. ¡Échale un vistazo! ✅",
+            "🕒 Ve directamente al minuto :time del video, ahí está la parte importante. Te ayudará bastante. 😉",
+            "🧐 Mira el minuto :time, es justo donde se toca ese tema. Luego me cuentas qué te parece. 🎥",
+            "💡 En el minuto :time está la clave. Te animo a verlo, seguro te despeja esa inquietud. 🔍",
+            "⏳ El minuto :time del video tiene justo la información que estás buscando. ¡Dale play! ▶️",
+            "📺 Puedes ir al minuto :time para ver esa parte en detalle. Es muy útil. ¡Cuéntame qué piensas luego! 💬",
+            "🔎 Si vas al minuto :time, encontrarás justo lo que necesitas entender. Es muy claro ahí. 🎓",
+            "🧠 En el video, el minuto :time toca ese tema. Vale la pena revisarlo. ¡Te va a servir! 👍",
+            "📖 El minuto :time es como una mini clase magistral. ¡Imperdible! ✨",
+            "📹 Todo se aclara en el minuto :time. Revisa ese momento del video. 🎯",
+            "💬 Ese tema lo abordan justo en el minuto :time. Dale una mirada. 👁️",
+            "🌟 No te pierdas el minuto :time, es oro puro. 🪙",
+            "🤓 En el minuto :time está la explicación detallada. ¡Te va a encantar! 📚",
+            "🔥 El minuto :time tiene justo lo que buscás. ¡Está muy bien explicado! 💯",
+            "🎯 Ve al minuto :time y despeja esa duda en segundos. Rápido y claro. ✅",
+            "📍 Minuto :time: ahí se resuelve todo. ¡No te lo pierdas! 💥",
+            "🎧 Escucha atentamente el minuto :time, ahí lo dicen clarito. 🔊",
+            "📝 Toma nota del minuto :time, es muy importante. 📒",
+            "🌈 Si tienes dudas, el minuto :time puede iluminarte. Dale una vuelta. 💡",
+            "👂 Presta atención al minuto :time, seguro te resuena. 🎵",
+            "🏹 El punto exacto que buscas está en el minuto :time. 🎯",
+            "🔑 La clave está en el minuto :time. Sin duda. 🗝️",
+            "🎯 Lo que preguntas se responde justo en el minuto :time. ¡Perfecto! 🫶",
+            "🗓️ En el minuto :time se habla de ese tema en profundidad. ✔️",
+            "🥇 Minuto :time = respuesta top. Te va a servir mucho. 🙌",
+            "💬 Lo explican claramente en el minuto :time. No te lo pierdas. 📢",
+            "🧭 Te recomiendo ir al minuto :time. Esa parte es muy útil. 📌",
+            "🌟 Te lo explican paso a paso en el minuto :time. Muy claro. 🔍",
+            "🧩 Esa pieza encaja en el minuto :time. Revísalo. 🧠",
+            "🚀 Todo hace clic en el minuto :time. Es brillante. 💫",
+            "📚 Aprende más revisando el minuto :time. Es muy revelador. 📖",
+            "🌍 Justo en el minuto :time hablan de eso. ¡Dale play! 📺",
+            "🧠 Si ves el minuto :time, vas a tenerlo todo claro. No falla. ✨",
+            "🎥 La parte más clara está en el minuto :time. Revísala. ✅",
+            "🔍 Esa duda la resuelven en el minuto :time. Súper útil. 📌",
+            "💭 Minuto :time = menos dudas, más claridad. 🧘‍♂️",
+            "🧪 Lo explican con detalle en el minuto :time. Ideal para entender. 🧬",
+            "⚙️ En el minuto :time todo encaja. Revisa ese segmento. 🧠",
+            "🌟 Si tienes poco tiempo, ve al minuto :time. Es lo que necesitas. ⌛",
+            "📢 Escucha bien el minuto :time, ahí está la explicación. 👂",
+            "🔧 Revisa el minuto :time si quieres entender bien ese concepto. 🛠️",
+            "🏆 Minuto :time = explicación ganadora. 🔝",
+            "🤩 Vas a entender todo si vas al minuto :time. ¡Recomendado! 🧭",
+            "🧠 Mucho más claro en el minuto :time. Échale un ojo. 👀",
+            "💬 ¿Tienes dudas? Mira el minuto :time. Es justo lo que buscas. 🧾",
+            "🧵 Todo el hilo se conecta en el minuto :time. ¡Súper claro! 🪡",
+            "📍 En el minuto :time está la explicación que necesitas. Ve ahí. 🔎",
+            "🎓 Esa parte del tema se cubre justo en el minuto :time. 🎥",
+            "🎈 Para entender mejor, ve al minuto :time. Está genial explicado. 🧸",
+            "🪄 Si algo no te queda claro, el minuto :time lo deja todo mágico. ✨",
+            "📅 Ese punto exacto se cubre en el minuto :time del video. ⏱️",
+            "🌱 Dale un vistazo al minuto :time, es una semilla de aprendizaje. 🌿",
+            "🔦 Ilumina tu duda con el minuto :time. Te va a ayudar. 💡",
+            "🎲 Tu mejor jugada es mirar el minuto :time. ¡Hazlo! 🎯",
+            "🎠 Gira hacia el minuto :time y verás todo más claro. 🎡",
+            "🧮 Para comprender, empieza por el minuto :time. ¡Funciona! 📏",
+            "🔔 No dejes pasar el minuto :time. Es crucial. 🔕",
+            "🧊 El momento más claro es el minuto :time. Directo y al punto. 📌",
+            "🚦El minuto :time es la luz verde para tu comprensión. 💡",
+            "🪤 Tu duda queda atrapada y resuelta en el minuto :time. ¡Zas! ⚡",
+            "📍 Revisa el minuto :time, es el centro del asunto. 🧠",
+            "🖥️ Minuto :time: explicación clara y directa. Recomendado. ✅",
+            "🧗 El minuto :time es el punto más alto. Desde ahí, todo es bajada. 🏔️",
+            "🪁 Vuela directo al minuto :time. Es el corazón del tema. ❤️",
+            "🛸 Aborda el minuto :time para una mejor perspectiva. 🛰️",
+            "📼 En el minuto :time hay una parte muy útil. ¡Ve ahí! 🧷",
+            "🥽 Ponte las gafas y mira el minuto :time. Todo se aclara. 🔎",
+            "🛎️ Llama a tu atención el minuto :time. ¡Vale la pena! 🧠",
+            "🧵 El hilo conductor se encuentra en el minuto :time. 📍",
+            "🧠 ¿Confundido? Minuto :time te da claridad. Hazle caso. 🗺️",
+            "📺 Ponle pausa, avanza al minuto :time y sigue desde ahí. 🎬",
+            "🗂️ Lo más relevante está en el minuto :time. ¡Revisa! 🔎",
+            "🌐 Si hay algo que no entendiste, míralo en el minuto :time. 🧭",
+            "🧑‍🏫 El profe lo explica muy bien en el minuto :time. ¡Escúchalo! 🎤",
+            "🧲 El minuto :time atrae todas las respuestas. Ve ahí. 🔮",
+            "🗃️ Ese tema lo desarrollan justo en el minuto :time. 🎓",
+            "🚀 Si quieres despegar en este tema, ve al minuto :time. 🌌",
+            "🏁 Empieza por el minuto :time si quieres ir al grano. 🏃‍♂️",
+            "🔂 Repite el minuto :time hasta que todo esté claro. 💭",
+            "🛎️ Atención especial al minuto :time. Es clave. ☝️",
+            "🫧 Las dudas se disuelven en el minuto :time. Revisa. 🌊",
+            "📍 Encuentra el núcleo de la explicación en el minuto :time. 🎯",
+            "🔋 Recarga tu comprensión viendo el minuto :time. ⚡",
+            "🔭 Enfócate en el minuto :time, ahí está todo. 🧠",
+            "🚨 ¡Importante! Minuto :time tiene justo lo que preguntas. 👇",
+            "🧰 El minuto :time es una herramienta poderosa. ¡Úsala! 🔨",
+            "🏗️ Construye tu conocimiento desde el minuto :time. 🧱",
+            "🌄 Todo empieza a tener sentido en el minuto :time. Ve allá. 🌞",
+            "🧙‍♂️ Minuto :time: donde ocurre la magia del entendimiento. 🪄",
+            "🧭 Si estás perdido, el minuto :time es tu guía. Sigue ese rumbo. 🗺️",
+            "📽️ Todo cobra sentido cuando ves el minuto :time. ¡Compruébalo! 🎞️",
+            "💫 Dale una oportunidad al minuto :time. Podría sorprenderte. 🌠",
+        ];
+    }
+
+    public function recomendarRevision($questionId)
     {
         // Varificar si tiene chat Abiertos y tomar el primero o crear
         if (ChatHeader::where('user_id', Auth::user()->id)->where('estado', 'ABIERTO')->exists()) {
@@ -161,7 +261,37 @@ class LevelComponent extends Component
             $chatHeader->save();
         }
 
-        // Captar en mensaje y guardar
+        $question = LevelQuestion::find($questionId);
+
+        // Simular respuesta del bot
+        $respuestas = $this->respuestasSimuladasGPT();
+
+        $randomRespuesta = $respuestas[array_rand($respuestas)];
+        $respuestaFinal = str_replace(':time', $question->time_response, $randomRespuesta);
+
+        $chatDetalleBot = new ChatDetalle();
+        $chatDetalleBot->chat_header_id = $chatHeader->id;
+        $chatDetalleBot->mensaje = $respuestaFinal;
+        $chatDetalleBot->bot = true;
+        $chatDetalleBot->save();
+    }
+
+    public function enviarMensaje()
+    {
+        $this->sendingMessage = true; // Bloquear input y botón
+        $this->dispatch('$refresh'); // Forzar actualización inmediata
+
+
+        // Procesar el mensaje y guardarlo
+        if (ChatHeader::where('user_id', Auth::user()->id)->where('estado', 'ABIERTO')->exists()) {
+            $chatHeader = ChatHeader::where('user_id', Auth::user()->id)->where('estado', 'ABIERTO')->first();
+        } else {
+            $chatHeader = new ChatHeader();
+            $chatHeader->user_id = Auth::user()->id;
+            $chatHeader->estado = 'ABIERTO';
+            $chatHeader->save();
+        }
+
         $chatDetalle = new ChatDetalle();
         $chatDetalle->chat_header_id = $chatHeader->id;
         $chatDetalle->mensaje = $this->message;
@@ -170,14 +300,21 @@ class LevelComponent extends Component
 
         // Simular respuesta del bot
         $respuesta = $this->obtenerRespuesta($this->message, $chatHeader->id, $this->message);
+        
         $chatDetalleBot = new ChatDetalle();
         $chatDetalleBot->chat_header_id = $chatHeader->id;
         $chatDetalleBot->mensaje = $respuesta;
         $chatDetalleBot->bot = true;
         $chatDetalleBot->save();
+        
 
         $this->message = '';
+
+        $this->sendingMessage = false;
+        $this->dispatch('$refresh');
+        $this->dispatch('scrollToBottom');
     }
+
     public function obtenerRespuesta($prompt, $chatId, $message)
     {
         try {

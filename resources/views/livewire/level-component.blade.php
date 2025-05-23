@@ -47,19 +47,21 @@
         </div>
     </div>
     @endif
-    @if($this->notificaciones == 0)
-    <a wire:click="abrirModal()" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
-        data-bs-target="#miModal">
+
+    <!-- Boton chat -->
+    <a wire:click="abrirModal()" class="floating-btn d-flex align-items-center justify-content-center"
+        style="background-color: {{ $this->notificaciones > 0 ? 'red' : 'blue' }} !important; position: fixed; bottom: 20px; right: 20px;" 
+        data-bs-toggle="modal" data-bs-target="#miModal">
+        
         <i class="fas fa-robot"></i>
+
+        @if($this->notificaciones > 0)
+            <span class="notification-badge">{{ $this->notificaciones }}</span>
+        @endif
     </a>
-    @else
-    <a wire:click="abrirModal()" class="floating-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal"
-        style="background-color: red !important;
-        data-bs-target="#miModal">
-        <i class="fas fa-robot"></i>
-        {{$this->notificaciones}}
-    </a>
-    @endif
+
+
+    
 
     <!-- Modal Chat -->
     <div wire:ignore.self class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
@@ -106,11 +108,33 @@
 
                 <!-- Input -->
                 <div class="chat-input-area border-top d-flex align-items-center p-3">
-                    <input type="text" class="form-control me-2" placeholder="Escribe tu mensaje..." wire:model="message">
-                    <button class="btn btn-primary rounded-circle" wire:click.stop="enviarMensaje()" title="Enviar">
-                        <i class="fas fa-paper-plane"></i>
+                    <input 
+                        type="text" 
+                        class="form-control me-2" 
+                        placeholder="Escribe tu mensaje..." 
+                        wire:model="message" 
+                        wire:keydown.enter="enviarMensaje"
+                        wire:loading.attr="disabled"
+                        wire:target="enviarMensaje"
+                    >
+
+                    <button 
+                        class="btn btn-primary rounded-circle" 
+                        wire:click="enviarMensaje" 
+                        title="Enviar" 
+                        wire:loading.attr="disabled"
+                        wire:target="enviarMensaje"
+                    >
+                        <span wire:loading.remove wire:target="enviarMensaje">
+                            <i class="fas fa-paper-plane"></i>
+                        </span>
+                        <span wire:loading wire:target="enviarMensaje">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
                     </button>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -125,6 +149,11 @@
             console.log('respuesta desde bk');
             //cargarVideo();
             //location.reload();
+        });
+        window.addEventListener('scrollToBottom', event => {
+            console.log('entra dom');
+            var chatMessages = document.getElementById("chatMessages");
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         });
 
         function advertenciaInicio(){
@@ -194,5 +223,37 @@
             padding: 12px 30px;
             border-radius: 30px;
         }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: red !important;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+            z-index: 9999; /* Asegura que no lo tapen otros elementos */
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: yellow;
+            color: black;
+            font-weight: bold;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 50%;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
     </style>
 </div>
