@@ -14,10 +14,12 @@ use Livewire\Livewire;
 Route::get('/', HomeComponent::class)->name('home');
 
 // Privadas
+Route::get('/analisis', AnalisisComponent::class);
+Route::get('/gestion', GestionComponent::class);
+Route::get('/estrategia', EstrategiaComponent::class);
+
+
 Route::get('/person', UserComponent::class)->middleware(['auth'])->name('person');
-Route::get('/analysis', AnalisisComponent::class)->middleware(['auth']);
-Route::get('/gestion', GestionComponent::class)->middleware(['auth']);
-Route::get('/estrategia', EstrategiaComponent::class)->middleware(['auth']);
 Route::get('/levels/{personId}', LevelComponent::class)->middleware(['auth']);
 Route::get('/certificado-final/{personId}', CertificateComponent::class)->middleware(['auth']);
 
