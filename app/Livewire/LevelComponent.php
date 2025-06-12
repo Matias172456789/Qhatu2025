@@ -318,7 +318,7 @@ class LevelComponent extends Component
     public function obtenerRespuesta($prompt, $chatId, $message)
     {
         try {
-            $mainUrl = 'http://186.101.189.104:5010/';
+            $mainUrl = 'http://186.101.189.104:5015/';
             $chatbotUrl = 'api/chatbot';
 
 
